@@ -11,6 +11,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import confusion_matrix
 
 
 # Load dataset
@@ -54,6 +55,15 @@ for name, model in models:
     names.append(name)
     print('%s training: %f (%f)' % (name, cv_results.mean(), cv_results.std()))
 
-# Prediction
+# Cross-validation prediction
 print('KNN prediction: %.2f' % (prediction_results[0].mean()))
 print('SVM prediction: %.2f' % (prediction_results[1].mean()))
+
+# Model prediction
+for name, model in models:
+    model.fit(X_train, Y_train)
+    predictions = model.predict(X_test)
+    
+    # Evaluation matrics
+    print("Confusion Matrix: ")
+    print(confusion_matrix(Y_test, predictions))
